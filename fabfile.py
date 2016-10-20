@@ -14,3 +14,10 @@ def install(env="env"):
 @task
 def test():
     local("./manage.py test")
+
+
+@task
+def prepare_deploy():
+    local("./manage.py test")
+    local("git add -p && git commit")
+    local("git push")
