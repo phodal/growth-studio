@@ -4,6 +4,7 @@ from fabric.api import local
 from fabric.context_managers import cd
 from fabric.context_managers import prefix
 from fabric.decorators import task
+from fabric.operations import run
 from fabric.state import env
 
 env.directory = '/Users/fdhuang/write/growth_studio'
@@ -47,3 +48,15 @@ def prepare_deploy():
     local("git add -p && git commit")
     local("git push")
 
+
+def setup():
+    "Setup the Ubuntu Env"
+    APT_GET_PACKAGES = [
+        "build-essential",
+        "git",
+        "python-dev",
+        "python-virtualenv",
+        "python-pip",
+        "nginx",
+    ]
+    run("apt-get install " + " ".join(APT_GET_PACKAGES))
