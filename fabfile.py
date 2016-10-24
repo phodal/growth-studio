@@ -21,7 +21,8 @@ def virtualenv():
 @task
 def runserver():
     "Run Server"
-    local("./manage.py runserver 0.0.0.0:8000")
+    with virtualenv():
+        local("./manage.py runserver 0.0.0.0:8000")
 
 
 @task
@@ -35,7 +36,8 @@ def install(requirements_env="env"):
 @task
 def test():
     "Run Test"
-    local("./manage.py test")
+    with virtualenv():
+        local("./manage.py test")
 
 
 @task
