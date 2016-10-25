@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 
 from fabric.api import local
-from fabric.context_managers import cd
+from fabric.context_managers import cd, settings, hide
 from fabric.context_managers import prefix
 from fabric.decorators import task
 from fabric.operations import run, sudo
@@ -11,6 +11,8 @@ env.directory = '/Users/fdhuang/write/growth_studio'
 env.activate = 'source /Users/fdhuang/write/py35env/bin/activate'
 env.hosts = ['10.211.55.26']
 env.user = 'phodal'
+
+
 # env.key_filename = '/path/to/keyfile.pem'
 
 @contextmanager
@@ -34,6 +36,20 @@ def install(requirements_env="env"):
     with cd(env.directory):
         with virtualenv():
             local("pip install -r requirements/%s.txt" % requirements_env)
+
+
+@task
+def check_pep8():
+    """ Check the project for PEP8 compliance using `pep8` """
+    with settings(hide('warnings'), warn_only=True):
+        local('pep8 .')
+
+
+@task
+def check_pylint():
+    """ Check the project for PEP8 compliance using `pylint`. """
+    with settings(hide('warnings'), warn_only=True):
+        local('pylint --reports=n --rcfile=.pylintrc blog')
 
 
 @task
@@ -64,14 +80,15 @@ def setup():
     ]
     sudo("apt-get install " + " ".join(APT_GET_PACKAGES))
 
-@task 
+
+@task
 def fetch_version(version):
-	"Fetch Git Version"
-	local('wget https://codeload.github.com/phodal/growth_studio/tar.gz/%s' % version)
-	local('tar xvf %s' % version)
+    "Fetch Git Version"
+    local('wget https://codeload.github.com/phodal/growth_studio/tar.gz/%s' % version)
+    local('tar xvf %s' % version)
+
 
 @task
 def ls():
-	"list files in remote"
-	run('ls -alh')
-
+    "list files in remote"
+    run('ls -alh')
