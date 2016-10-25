@@ -1,8 +1,7 @@
-Growth Studio 
+Growth Studio
 ===
 
-> The Demo Code of Book Growth Enginner Paper
-
+> The Demo Code of Book "Growth Enginner: Thinking Web", and for Growth Studio Team.
 
 Setup
 ---
@@ -27,7 +26,13 @@ fab install:dev
 brew install geckodriver
 ```
 
-Test
+4. Deploy
+
+```bash
+fab deploy
+```
+
+Run Test
 
 ```
 fab test
@@ -36,4 +41,8 @@ fab test
 License
 ---
 
-MIT
+[![Phodal's Book](http://brand.phodal.com/shields/book-small.svg)](https://www.phodal.com/)
+
+© 2016 A [Phodal Huang](https://www.phodal.com)'s [Idea](http://github.com/phodal/ideas).  This code is distributed under the MIT license. See `LICENSE` in this directory.
+
+[待我代码编成，娶你为妻可好](http://www.xuntayizhan.com/blog/ji-ke-ai-qing-zhi-er-shi-dai-wo-dai-ma-bian-cheng-qu-ni-wei-qi-ke-hao-wan/)
