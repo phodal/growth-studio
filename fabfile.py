@@ -4,7 +4,7 @@ from fabric.api import local
 from fabric.context_managers import cd
 from fabric.context_managers import prefix
 from fabric.decorators import task
-from fabric.operations import run
+from fabric.operations import run, sudo
 from fabric.state import env
 
 env.directory = '/Users/fdhuang/write/growth_studio'
@@ -62,7 +62,7 @@ def setup():
         "python-pip",
         "nginx",
     ]
-    run("apt-get install " + " ".join(APT_GET_PACKAGES))
+    sudo("apt-get install " + " ".join(APT_GET_PACKAGES))
 
 
 @task
