@@ -68,6 +68,7 @@ def setup():
 def fetch_version(version):
 	"Fetch Git Version"
 	local('wget https://codeload.github.com/phodal/growth_studio/tar.gz/%s' % version)
+	local('tar xvf %s' % version)
 
 @task
 def ls():
