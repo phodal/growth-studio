@@ -9,7 +9,9 @@ from fabric.state import env
 
 env.directory = '/Users/fdhuang/write/growth_studio'
 env.activate = 'source /Users/fdhuang/write/py35env/bin/activate'
-
+env.hosts = ['10.211.55.26']
+env.user = 'phodal'
+# env.key_filename = '/path/to/keyfile.pem'
 
 @contextmanager
 def virtualenv():
@@ -49,6 +51,7 @@ def prepare_deploy():
     local("git push")
 
 
+@task
 def setup():
     "Setup the Ubuntu Env"
     APT_GET_PACKAGES = [
@@ -60,3 +63,10 @@ def setup():
         "nginx",
     ]
     run("apt-get install " + " ".join(APT_GET_PACKAGES))
+
+
+@task
+def ls():
+	"list files in remote"
+	run('ls -alh')
+
