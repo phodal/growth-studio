@@ -64,6 +64,10 @@ def setup():
     ]
     sudo("apt-get install " + " ".join(APT_GET_PACKAGES))
 
+@task 
+def fetch_version(version):
+	"Fetch Git Version"
+	local('wget https://codeload.github.com/phodal/growth_studio/tar.gz/%s' % version)
 
 @task
 def ls():
