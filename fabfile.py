@@ -57,9 +57,9 @@ def setup():
     APT_GET_PACKAGES = [
         "build-essential",
         "git",
-        "python-dev",
-        "python-virtualenv",
-        "python-pip",
+        "python3-dev",
+        "python3-virtualenv",
+        "python3-pip",
         "nginx",
     ]
     sudo("apt-get install " + " ".join(APT_GET_PACKAGES))
