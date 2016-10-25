@@ -49,7 +49,7 @@ def check_pep8():
 def check_pylint():
     """ Check the project for PEP8 compliance using `pylint`. """
     with settings(hide('warnings'), warn_only=True):
-        local('pylint --reports=n --rcfile=.pylintrc blog')
+        local('pylint --reports=n --load-plugins pylint_django blog')
 
 
 @task

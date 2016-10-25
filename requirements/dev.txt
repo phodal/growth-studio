@@ -3,3 +3,4 @@ selenium==3.0.1
 fabric3==1.12.post1
 pep8==1.7.0
 pylint==1.6.4
+pylint-django==0.7.2
