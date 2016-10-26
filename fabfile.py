@@ -81,6 +81,7 @@ def setup():
     sudo("apt-get install " + " ".join(APT_GET_PACKAGES))
 
 
+@task
 def tag_version(version):
     "Tag New Version"
     local("git tag %s" % version)
