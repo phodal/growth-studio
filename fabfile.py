@@ -81,6 +81,12 @@ def setup():
     sudo("apt-get install " + " ".join(APT_GET_PACKAGES))
 
 
+def tag_version(version):
+    "Tag New Version"
+    local("git tag %s" % version)
+    local("git push origin %s" % version)
+
+
 @task
 def fetch_version(version):
     "Fetch Git Version"
