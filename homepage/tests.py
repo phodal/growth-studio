@@ -13,4 +13,5 @@ class HomePageTest(TestCase):
     def test_home_page_returns_correct_html(self):
         request = HttpRequest()
         response = index(request)
-        self.assertIn(b'<title>Growth Studio - Enjoy Create & Share</title>', response.content)
+        self.assertIn(b'<title>Growth Studio - Enjoy Create & Share</title>',
+                      response.content)

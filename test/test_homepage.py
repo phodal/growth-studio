@@ -17,4 +17,5 @@ class HomepageTestCase(LiveServerTestCase):
             '%s%s' % (self.live_server_url, "/")
         )
 
-        self.assertIn("Growth Studio - Enjoy Create & Share", self.selenium.title)
+        self.assertIn("Growth Studio - Enjoy Create & Share",
+                      self.selenium.title)

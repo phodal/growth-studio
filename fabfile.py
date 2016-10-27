@@ -91,7 +91,8 @@ def tag_version(version):
 @task
 def fetch_version(version):
     "Fetch Git Version"
-    local('wget https://codeload.github.com/phodal/growth_studio/tar.gz/%s' % version)
+    url = 'https://codeload.github.com/phodal/growth_studio/tar.gz/'
+    local(('wget ' + url + '%s') % version)
     local('tar xvf %s' % version)
 
 
