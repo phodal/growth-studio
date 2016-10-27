@@ -4,7 +4,7 @@ from selenium import webdriver
 
 class HomepageTestCase(LiveServerTestCase):
     def setUp(self):
-        self.selenium = webdriver.Firefox()
+        self.selenium = webdriver.Chrome()
         self.selenium.maximize_window()
         super(HomepageTestCase, self).setUp()
 

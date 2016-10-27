@@ -62,9 +62,9 @@ def test():
 @task
 def prepare_deploy():
     "Prepare Deploy"
+    check_pep8()
+    check_pylint()
     local("./manage.py test")
-    local("git add -p && git commit")
-    local("git push")
 
 
 @task
