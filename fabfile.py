@@ -31,7 +31,7 @@ def runserver():
 
 
 @task
-def install(requirements_env="env"):
+def install(requirements_env="dev"):
     "Install requirements packages"
     with cd(env.directory):
         with virtualenv():
