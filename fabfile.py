@@ -17,7 +17,7 @@ env.user = 'phodal'
 
 @contextmanager
 def virtualenv():
-    "Activate virtualenv"
+    """ Activate virtualenv """
     with cd(env.directory):
         with prefix(env.activate):
             yield
@@ -25,14 +25,14 @@ def virtualenv():
 
 @task
 def runserver():
-    "Run Server"
+    """Run Server"""
     with virtualenv():
         local("./manage.py runserver 0.0.0.0:8000")
 
 
 @task
 def install(requirements_env="dev"):
-    "Install requirements packages"
+    """ Install requirements packages """
     with cd(env.directory):
         with virtualenv():
             local("pip install -r requirements/%s.txt" % requirements_env)
@@ -54,14 +54,14 @@ def check_pylint():
 
 @task
 def test():
-    "Run Test"
+    """ Run Test """
     with virtualenv():
         local("./manage.py test")
 
 
 @task
 def prepare_deploy():
-    "Prepare Deploy"
+    """ Prepare Deploy """
     check_pep8()
     check_pylint()
     local("./manage.py test")
@@ -69,7 +69,7 @@ def prepare_deploy():
 
 @task
 def setup():
-    "Setup the Ubuntu Env"
+    """ Setup the Ubuntu Env """
     APT_GET_PACKAGES = [
         "build-essential",
         "git",
@@ -83,14 +83,14 @@ def setup():
 
 @task
 def tag_version(version):
-    "Tag New Version"
+    """ Tag New Version """
     local("git tag %s" % version)
     local("git push origin %s" % version)
 
 
 @task
 def fetch_version(version):
-    "Fetch Git Version"
+    """ Fetch Git Version """
     url = 'https://codeload.github.com/phodal/growth_studio/tar.gz/'
     local(('wget ' + url + '%s') % version)
     local('tar xvf %s' % version)
@@ -98,5 +98,5 @@ def fetch_version(version):
 
 @task
 def ls():
-    "list files in remote"
+    """ list files in remote """
     run('ls -alh')
