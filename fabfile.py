@@ -106,18 +106,17 @@ def ls():
 
 
 @task
-def deploy():
+def deploy(version):
     """ depoly app to cloud """
-    version = 'v0.0.2-pre'
     run('cd ~/')
-    run(('wget ' + 'https://codeload.github.com/phodal/growth_studio/tar.gz/' + '%s') % version)
-    run('tar xvf %s' % version)
+    run(('wget ' + 'https://codeload.github.com/phodal/growth_studio/tar.gz/v' + '%s') % version)
+    run('tar xvf v%s' % version)
 
     # run('rm -rf growth-studio')
     # run('mv growth-studio-%s growth-studio'%version[1:])
-    run('rm %s'%version)
+    run('rm v%s'%version)
 
     # sudo('pip3 install virtualenv')
     run('virtualenv --distribute -p /usr/bin/python3.5 py35env')
     run('source py35env/bin/activate')
-    run('pip3 install -r growth-studio-%s/requirements/prod.txt' % version[1:])
+    run('pip3 install -r growth-studio-%s/requirements/prod.txt' % version)
