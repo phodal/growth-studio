@@ -82,7 +82,8 @@ def setup():
         "virtualenv",
     ]
     sudo("apt-get install " + " ".join(APT_GET_PACKAGES))
-
+    sudo('pip3 install virtualenv')
+    run('virtualenv --distribute -p /usr/bin/python3.5 py35env')
 
 @task
 def tag_version(version):
@@ -113,10 +114,9 @@ def deploy(version):
     run('tar xvf v%s' % version)
 
     # run('rm -rf growth-studio')
-    # run('mv growth-studio-%s growth-studio'%version[1:])
-    run('rm v%s'%version)
+    # run('mv growth-studio-%s growth-studio'%version)
+    # run('rm v%s'%version)
 
-    # sudo('pip3 install virtualenv')
-    run('virtualenv --distribute -p /usr/bin/python3.5 py35env')
     run('source py35env/bin/activate')
     run('pip3 install -r growth-studio-%s/requirements/prod.txt' % version)
+    run('ln -s growth-studio-%s growth-studio'%version)
