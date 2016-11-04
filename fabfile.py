@@ -11,6 +11,7 @@ env.directory = '/Users/fdhuang/write/growth_studio'
 env.activate = 'source /Users/fdhuang/write/py35env/bin/activate'
 env.hosts = ['10.211.55.26']
 env.user = 'phodal'
+env.password = '940217'
 
 
 # env.key_filename = '/path/to/keyfile.pem'
@@ -70,6 +71,7 @@ def prepare_deploy():
 @task
 def setup():
     """ Setup the Ubuntu Env """
+    sudo('apt-get update')
     APT_GET_PACKAGES = [
         "build-essential",
         "git",
@@ -77,6 +79,7 @@ def setup():
         "python3-virtualenv",
         "python3-pip",
         "nginx",
+        "virtualenv",
     ]
     sudo("apt-get install " + " ".join(APT_GET_PACKAGES))
 
@@ -100,3 +103,21 @@ def fetch_version(version):
 def ls():
     """ list files in remote """
     run('ls -alh')
+
+
+@task
+def deploy():
+    """ depoly app to cloud """
+    version = 'v0.0.2-pre'
+    run('cd ~/')
+    run(('wget ' + 'https://codeload.github.com/phodal/growth_studio/tar.gz/' + '%s') % version)
+    run('tar xvf %s' % version)
+
+    # run('rm -rf growth-studio')
+    # run('mv growth-studio-%s growth-studio'%version[1:])
+    run('rm %s'%version)
+
+    # sudo('pip3 install virtualenv')
+    run('virtualenv --distribute -p /usr/bin/python3.5 py35env')
+    run('source py35env/bin/activate')
+    run('pip3 install -r growth-studio-%s/requirements/prod.txt' % version[1:])
