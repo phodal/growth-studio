@@ -12,10 +12,9 @@ class HomepageTestCase(LiveServerTestCase):
         self.selenium.quit()
         super(HomepageTestCase, self).tearDown()
 
-    def test_visit_homepage(self):
+    def test_can_visit_homepage(self):
         self.selenium.get(
-            '%s%s' % (self.live_server_url, "/")
+            '%s%s' % (self.live_server_url,  "/")
         )
 
-        self.assertIn("Growth Studio - Enjoy Create & Share",
-                      self.selenium.title)
+        self.assertIn("Growth Studio - Enjoy Create & Share", self.selenium.title)
