@@ -13,7 +13,7 @@ class Query(graphene.ObjectType):
 
     @graphene.resolve_only_args
     def resolve_users(self):
-        return Blog.objects.all()
+        return BlogModel.objects.all()
 
 
 schema = graphene.Schema(query=Query)
