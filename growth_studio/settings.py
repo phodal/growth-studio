@@ -39,10 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'graphene_django',
     'django_markdown',
     'homepage',
     'blog',
 ]
+
+GRAPHENE = {
+    'SCHEMA': 'blog.schema.schema' # Where your Graphene schema lives
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

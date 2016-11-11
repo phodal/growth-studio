@@ -1,11 +1,16 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import permalink
-from django_markdown.models import MarkdownField
 from django.template.defaultfilters import slugify
+from django.utils.translation import ugettext_lazy as _
+from django_markdown.models import MarkdownField
 
 
 class Blog(models.Model):
+    class Meta:
+        verbose_name = _('博客')
+        verbose_name_plural = _('博客')
+
     title = models.CharField(max_length=100, unique=True)
     author = models.ForeignKey(User)
     slug = models.SlugField(max_length=100, unique=True)

@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from graphene_django.views import GraphQLView
+
 from homepage.views import index as home
 
-urlpatterns = [
+urlpatterns = {
     url(r'^$', home, name='home'),
     url(r'^pages/', include('django.contrib.flatpages.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^graphql', GraphQLView.as_view(graphiql=True)),
     url('^markdown/', include('django_markdown.urls')),
-]
+}
