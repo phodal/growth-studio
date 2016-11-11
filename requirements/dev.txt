@@ -1,4 +1,5 @@
 Django==1.10.2
+django-markdown-app
 selenium==3.0.1
 fabric3==1.12.post1
 pep8==1.7.0
