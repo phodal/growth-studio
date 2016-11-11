@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^$', home, name='home'),
     url(r'^pages/', include('django.contrib.flatpages.urls')),
     url(r'^admin/', admin.site.urls),
+    url('^markdown/', include('django_markdown.urls')),
 ]
