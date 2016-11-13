@@ -17,11 +17,14 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from graphene_django.views import GraphQLView
 
+from blog.views import blog_list, blog_detail
 from homepage.views import index as home
 
 urlpatterns = [
     url(r'^$', home, name='home'),
     url(r'^pages/', include('django.contrib.flatpages.urls')),
+    url(r'^blog/$', blog_list),
+    url(r'^blog/(?P<slug>[^\.]+).html', blog_detail, name='blog_view'),
     url(r'^admin/', admin.site.urls),
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),
     url('^markdown/', include('django_markdown.urls')),
