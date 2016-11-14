@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'graphene_django',
     'django_markdown',
+    'rest_framework',
     'homepage',
     'blog',
 ]
