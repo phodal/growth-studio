@@ -21,9 +21,11 @@ class IsAuthenticatedOrReadOnly(BasePermission):
 
 
 class BlogSerializer(serializers.HyperlinkedModelSerializer):
+    author = serializers.HyperlinkedRelatedField(lookup_field='username', view_name='user-detail', many=True, read_only=True)
+
     class Meta:
         model = Blog
-        fields = ('title', 'body', 'slug', 'id')
+        fields = ('title', 'author', 'body', 'slug', 'id')
 
 
 class BlogSet(viewsets.ModelViewSet):
@@ -42,4 +44,26 @@ class BlogSet(viewsets.ModelViewSet):
             queryset = Blog.objects.filter(title__contains=search_param)
 
         serializer = BlogSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'date_joined', 'last_login')
+
+
+class UserDetail(viewsets.ReadOnlyModelViewSet):
+    authentication_classes = [JSONWebTokenAuthentication, BasicAuthentication, SessionAuthentication]
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def list(self, request):
+        queryset = None
+        search_param = self.request.query_params.get('username', None)
+        if search_param is not None:
+            queryset = User.objects.filter(username__contains=search_param)
+
+        serializer = UserSerializer(queryset, many=True)
         return Response(serializer.data)

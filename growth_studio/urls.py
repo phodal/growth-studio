@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from graphene_django.views import GraphQLView
 
-from blog.api import BlogSet
+from blog.api import BlogSet, UserDetail
 from blog.views import blog_list, blog_detail
 from homepage.views import index as home
 
@@ -26,6 +26,7 @@ from rest_framework_jwt import views as DRFViews
 
 apiRouter = routers.DefaultRouter()
 apiRouter.register(r'blog', BlogSet, 'Blog')
+apiRouter.register(r'user', UserDetail, 'User')
 
 urlpatterns = [
     url(r'^$', home, name='home'),
