@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
+from django_markdown.models import MarkdownField
 
 
 class Blog(models.Model):
@@ -13,7 +14,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=30, unique=True, verbose_name=_('标题'), help_text='博客的标题')
     author = models.ForeignKey(User, verbose_name=_('作者'))
     slug = models.SlugField(max_length=50, unique=True, verbose_name=_('URL'))
-    body = models.TextField(verbose_name=_('正文'))
+    body = MarkdownField(verbose_name=_('正文'))
     posted = models.DateField(db_index=True, auto_now_add=True)
 
     def __str__(self):

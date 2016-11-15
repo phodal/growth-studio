@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {%  block title %}{{ post.title }} - Phodal's Blog{% endblock %}
+{% load django_markdown %}
 
 {% block content %}
 <div class="container blog-list">
@@ -10,7 +11,7 @@
                 {{post.posted}} - By {{post.author}}
             </div>
 
-            <div class="article">{{post.body}}</div>
+            <div class="article">{{ post.body | markdown_safe}}</div>
         </article>
     </div>
 </div>
