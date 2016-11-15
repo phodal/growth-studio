@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework import serializers, viewsets
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import BasePermission
-from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from blog.models import Blog
@@ -34,24 +34,17 @@ class BlogSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('title', 'author', 'body', 'slug', 'id')
 
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 10
+
+
 class BlogSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = BlogSerializer
-    search_fields = 'title'
-
-    def get_queryset(self):
-        return Blog.objects.all()
-
-    def list(self, request):
-        queryset = Blog.objects.all()
-
-        search_param = self.request.query_params.get('title', None)
-        if search_param is not None:
-            queryset = Blog.objects.filter(title__contains=search_param)
-
-        serializer = BlogSerializer(queryset, many=True, context={'request': request})
-        return Response(serializer.data)
-
+    queryset = Blog.objects.all()
+    pagination_class = StandardResultsSetPagination
 
 
 class UserDetail(viewsets.ReadOnlyModelViewSet):
@@ -59,12 +52,3 @@ class UserDetail(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    def list(self, request):
-        queryset = None
-        search_param = self.request.query_params.get('username', None)
-        if search_param is not None:
-            queryset = User.objects.filter(username__contains=search_param)
-
-        serializer = UserSerializer(queryset, many=True)
-        return Response(serializer.data)
