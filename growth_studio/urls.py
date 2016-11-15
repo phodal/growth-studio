@@ -25,8 +25,8 @@ from rest_framework import routers
 from rest_framework_jwt import views as DRFViews
 
 apiRouter = routers.DefaultRouter()
-apiRouter.register(r'blog', BlogSet, 'Blog')
-apiRouter.register(r'user', UserDetail, 'User')
+apiRouter.register(r'blog', BlogSet, 'blog')
+apiRouter.register(r'user', UserDetail, 'user')
 
 urlpatterns = [
     url(r'^$', home, name='home'),

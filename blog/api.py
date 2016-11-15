@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
+from rest_framework import permissions
 from rest_framework import serializers, viewsets
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from rest_framework import permissions
 from blog.models import Blog
 
 SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
@@ -20,8 +20,14 @@ class IsAuthenticatedOrReadOnly(BasePermission):
         return False
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'date_joined', 'last_login')
+
+
 class BlogSerializer(serializers.HyperlinkedModelSerializer):
-    author = serializers.HyperlinkedRelatedField(lookup_field='username', view_name='user-detail', many=True, read_only=True)
+    author = UserSerializer
 
     class Meta:
         model = Blog
@@ -46,11 +52,6 @@ class BlogSet(viewsets.ModelViewSet):
         serializer = BlogSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'email', 'date_joined', 'last_login')
 
 
 class UserDetail(viewsets.ReadOnlyModelViewSet):
