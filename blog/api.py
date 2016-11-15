@@ -46,6 +46,12 @@ class BlogSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     pagination_class = StandardResultsSetPagination
 
+    def get_queryset(self):
+        queryset = Blog.objects.all()
+        title = self.request.query_params.get('title', None)
+        if title is not None:
+            queryset = queryset.filter(title__contains=title)
+        return queryset
 
 class UserDetail(viewsets.ReadOnlyModelViewSet):
     authentication_classes = [JSONWebTokenAuthentication, BasicAuthentication, SessionAuthentication]
