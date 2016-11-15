@@ -6,7 +6,7 @@
     <div class="row">
         {% if blogs %}
         {% for blog in blogs %}
-        <div class="col-sm-4">
+        <div class="col-lg-8">
             <h2><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></h2>
             {{blog.body | slice:":80"}}
             {{blog.posted}} - By {{blog.author}}

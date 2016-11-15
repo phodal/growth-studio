@@ -4,13 +4,13 @@
 {% block content %}
 <div class="container blog-list">
     <div class="row">
-        <article class="col-sm-4">
+        <article class="col-lg-12">
             <div>
                 <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
                 {{post.posted}} - By {{post.author}}
             </div>
 
-            <p>{{post.body}}</p>
+            <div class="article">{{post.body}}</div>
         </article>
     </div>
 </div>
