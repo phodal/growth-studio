@@ -154,3 +154,6 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:8000',
     'localhost:8100'
 )
+
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
