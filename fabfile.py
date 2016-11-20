@@ -1,71 +1,65 @@
-from contextlib import contextmanager
+import os
 
 from fabric.api import local
-from fabric.context_managers import cd, settings, hide
-from fabric.context_managers import prefix
 from fabric.decorators import task
-from fabric.operations import run, sudo
+from fabric.context_managers import settings, hide, cd, prefix
+from fabric.operations import sudo, run, put
 from fabric.state import env
 
-env.directory = '/Users/fdhuang/write/growth_studio'
-env.activate = 'source /Users/fdhuang/write/py35env/bin/activate'
+circus_file_path = os.path.realpath('deploy/circus.ini')
+circus_upstart_file_path = os.path.realpath('deploy/circus.conf')
+nginx_config_path = os.path.realpath('deploy/nginx')
+nginx_avaliable_path = "/etc/nginx/sites-available/"
+nginx_enable_path = "/etc/nginx/sites-enabled/"
+app_path = "~"
+virtual_env_path = "~/py35env/bin/activate"
+
 env.hosts = ['10.211.55.26']
 env.user = 'phodal'
 env.password = '940217'
 
 
-# env.key_filename = '/path/to/keyfile.pem'
-
-@contextmanager
-def virtualenv():
-    """ Activate virtualenv """
-    with cd(env.directory):
-        with prefix(env.activate):
-            yield
+@task
+def install():
+    """Install requirements packages"""
+    local("pip install -r requirements.txt")
 
 
 @task
 def runserver():
     """Run Server"""
-    with virtualenv():
-        local("./manage.py runserver 0.0.0.0:8000")
+    local("./manage.py runserver")
 
 
 @task
-def install(requirements_env="dev"):
-    """ Install requirements packages """
-    with cd(env.directory):
-        with virtualenv():
-            local("pip install -r requirements/%s.txt" % requirements_env)
-
-
-@task
-def check_pep8():
+def pep8():
     """ Check the project for PEP8 compliance using `pep8` """
     with settings(hide('warnings'), warn_only=True):
         local('pep8 .')
 
 
 @task
-def check_pylint():
-    """ Check the project for PEP8 compliance using `pylint`. """
-    with settings(hide('warnings'), warn_only=True):
-        local('pylint --load-plugins=pylint_django blog homepage')
+def tag_version(version):
+    """Tag New Version"""
+    local("git tag %s" % version)
+    local("git push origin %s" % version)
+
+
+@task
+def fetch_version(version):
+    """Fetch Git Version"""
+    local('wget https://codeload.github.com/phodal/growth_studio/tar.gz/%s' % version)
 
 
 @task
 def test():
     """ Run Test """
-    with virtualenv():
-        local("./manage.py test")
+    local("./manage.py test")
 
 
 @task
-def prepare_deploy():
-    """ Prepare Deploy """
-    check_pep8()
-    check_pylint()
-    local("./manage.py test")
+def host_type():
+    run('uname -a')
 
 
 @task
@@ -76,47 +70,88 @@ def setup():
         "build-essential",
         "git",
         "python3-dev",
-        "python3-virtualenv",
         "python3-pip",
         "nginx",
         "virtualenv",
     ]
-    sudo("apt-get install " + " ".join(APT_GET_PACKAGES))
-    sudo('pip3 install virtualenv')
+    sudo("apt-get install -y " + " ".join(APT_GET_PACKAGES))
+    sudo('pip3 install circus')
+    sudo('rm ' + nginx_enable_path + 'default')
     run('virtualenv --distribute -p /usr/bin/python3.5 py35env')
 
-@task
-def tag_version(version):
-    """ Tag New Version """
-    local("git tag %s" % version)
-    local("git push origin %s" % version)
+
+def nginx_restart():
+    "Reset nginx"
+    run("service nginx restart")
 
 
-@task
-def fetch_version(version):
-    """ Fetch Git Version """
-    url = 'https://codeload.github.com/phodal/growth_studio/tar.gz/'
-    local(('wget ' + url + '%s') % version)
-    local('tar xvf %s' % version)
+def nginx_start():
+    "Start nginx"
+    run("service nginx start")
 
 
-@task
-def ls():
-    """ list files in remote """
-    run('ls -alh')
+def nginx_config(nginx_config_path=nginx_config_path):
+    "Send nginx configuration"
+    for file_name in os.listdir(nginx_config_path):
+        put(os.path.join(nginx_config_path, file_name), nginx_avaliable_path, use_sudo=True)
+
+
+def circus_config():
+    "Send Circus configuration"
+    sudo('mkdir -p /etc/circus/')
+    put(circus_file_path, '/etc/circus/', use_sudo=True)
+
+
+def circus_upstart_config():
+    "Send Circus Upstart configuration"
+    put(circus_upstart_file_path, '/etc/init/', use_sudo=True)
+
+
+def circus_start():
+    "Send Circus Upstart configuration"
+    sudo('/usr/local/bin/circusd /etc/circus/circus.ini --daemon')
+
+
+def nginx_enable_site(nginx_config_file):
+    "Enable nginx site"
+    with cd(nginx_enable_path):
+        sudo('rm -f ' + nginx_config_file)
+        sudo('ln -s ' + nginx_avaliable_path + nginx_config_file)
 
 
 @task
 def deploy(version):
     """ depoly app to cloud """
-    run('cd ~/')
+    with cd(app_path):
+        get_app(version)
+        setup_app(version)
+        config_app()
+
+    nginx_config()
+    nginx_enable_site('growth-studio.conf')
+
+    circus_config()
+    circus_upstart_config()
+
+    circus_start()
+
+    nginx_restart()
+
+
+def config_app():
+    with cd('growth-studio'):
+        with prefix('source ' + virtual_env_path):
+            run('python manage.py collectstatic -l --noinput')
+            run('python manage.py migrate')
+
+
+def setup_app(version):
+    with prefix('source ' + virtual_env_path):
+        run('pip3 install -r growth-studio-%s/requirements/prod.txt' % version)
+        run('rm -f growth-studio')
+        run('ln -s growth-studio-%s growth-studio' % version)
+
+
+def get_app(version):
     run(('wget ' + 'https://codeload.github.com/phodal/growth_studio/tar.gz/v' + '%s') % version)
     run('tar xvf v%s' % version)
-
-    # run('rm -rf growth-studio')
-    # run('mv growth-studio-%s growth-studio'%version)
-    # run('rm v%s'%version)
-
-    run('source py35env/bin/activate')
-    run('pip3 install -r growth-studio-%s/requirements/prod.txt' % version)
-    run('ln -s growth-studio-%s growth-studio'%version)
