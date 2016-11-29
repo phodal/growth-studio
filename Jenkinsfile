@@ -5,16 +5,18 @@ node {
   git 'https://github.com/phodal/growth-studio'
 
   stage 'Setup'
-    sh './ci/setup.sh'
+    stage 'Create Virtualenv'
+      sh './ci/setup.sh'
 
-  stage 'Install'
-    sh './ci/install.sh'
+    stage 'Install'
+      sh './ci/install.sh'
 
-  stage 'Unit Test'
-    sh './ci/unit_test.sh'
+  stage 'Test'
+    stage 'Unit Test'
+      sh './ci/unit_test.sh'
 
-  stage 'E2E Test'
-    sh './ci/e2e.sh'
+    stage 'E2E Test'
+      sh './ci/e2e.sh'
 
   stage 'Deploy'
     echo 'Deploy In Design'
