@@ -4,6 +4,9 @@ node {
 
   git 'https://github.com/phodal/growth-studio'
 
+  stage 'Setup'
+    sh './ci/setup.sh'
+
   stage 'Install'
     sh './ci/install.sh'
 
