@@ -1,8 +1,8 @@
-# Setup a proper path, I call my virtualenv dir "venv" and
-# I've got the virtualenv command installed in /usr/local/bin
-PATH=$WORKSPACE/venv/bin:/usr/local/bin:$PATH
-if [ ! -d "venv" ]; then
+PATH=$WORKSPACE/py35env/bin:/usr/local/bin:$PATH
+if [ ! -d "py35env" ]; then
   virtualenv --distribute -p /usr/local/bin/python3.5 py35env
 fi
 . py35env/bin/activate
-pip install -r requirements/dev.txt
+pip3 install fabric3
+pip3 install -r requirements/dev.txt
+
