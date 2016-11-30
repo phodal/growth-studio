@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
 
 from blog.api import BlogSet, UserDetail
@@ -30,7 +31,7 @@ apiRouter.register(r'user', UserDetail, 'user')
 
 urlpatterns = [
     url(r'^$', home, name='home'),
-    url(r'^pages/', include('django.contrib.flatpages.urls')),
+    url(r'^pages/about-us/$', TemplateView.as_view(template_name='flatpages/about-us.html')),
     url(r'^blog/$', blog_list),
     url(r'^blog/(?P<slug>[^\.]+).html', blog_detail, name='blog_view'),
     url(r'^admin/', admin.site.urls),
