@@ -54,7 +54,13 @@ def fetch_version(version):
 @task
 def test():
     """ Run Test """
-    local("./manage.py test")
+    local("./manage.py test blog")
+
+
+@task
+def e2e():
+    """Run E2E Test"""
+    local("./manage.py test e2e")
 
 
 @task
