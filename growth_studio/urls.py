@@ -31,7 +31,7 @@ apiRouter.register(r'user', UserDetail, 'user')
 
 urlpatterns = [
     url(r'^$', home, name='home'),
-    url(r'^pages/about-us/$', TemplateView.as_view(template_name='flatpages/about-us.html')),
+    url(r'^about-us/$', TemplateView.as_view(template_name='pages/about-us.html')),
     url(r'^blog/$', blog_list),
     url(r'^blog/(?P<slug>[^\.]+).html', blog_detail, name='blog_view'),
     url(r'^admin/', admin.site.urls),
