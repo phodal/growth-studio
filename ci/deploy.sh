@@ -1,2 +1,2 @@
 . py35env/bin/activate
-fab deploy:'1.${env.BUILD_NUMBER}'
+fab deploy:1.${env.BUILD_NUMBER}
