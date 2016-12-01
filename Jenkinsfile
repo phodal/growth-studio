@@ -19,6 +19,10 @@ node {
   stage ('E2E Test') {
     sh './ci/e2e.sh'
   }
+
+  stage ('Release') {
+    sh './ci/tag.sh'
+  }
   
   stage ('Deploy') {
     sh '. py35env/bin/activate'
