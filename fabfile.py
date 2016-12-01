@@ -64,6 +64,12 @@ def e2e():
 
 
 @task
+def ac():
+    """Run E2E Test"""
+    local("./manage.py test ac")
+
+
+@task
 def host_type():
     run('uname -a')
 
