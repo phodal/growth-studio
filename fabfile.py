@@ -64,6 +64,11 @@ def e2e():
 
 
 @task
+def prepare_ac():
+    run('echo "from django.contrib.auth.models import User; User.objects.create_superuser(%s, %s, %s)" | python manage.py shell' % ('test', 'test@phodal.com', 'test'))
+
+
+@task
 def ac():
     """Run E2E Test"""
     local("./manage.py test ac")

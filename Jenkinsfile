@@ -23,4 +23,8 @@ node {
   stage ('Deploy') {
     sh './ci/deploy.sh'
   }
+
+  stage ('AC') {
+    sh './ci/deploy.sh'
+  }
 }
