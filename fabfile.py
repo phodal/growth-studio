@@ -22,7 +22,7 @@ env.password = '940217'
 @task
 def install():
     """Install requirements packages"""
-    local("pip install -r requirements/dev.txt")
+    local("pip install -r requirements.txt")
 
 
 @task
@@ -99,12 +99,12 @@ def setup():
 
 def nginx_restart():
     "Reset nginx"
-    run("service nginx restart")
+    sudo("service nginx restart")
 
 
 def nginx_start():
     "Start nginx"
-    run("service nginx start")
+    sudo("service nginx start")
 
 
 def nginx_config(nginx_config_path=nginx_config_path):
@@ -127,6 +127,7 @@ def circus_upstart_config():
 def circus_start():
     "Send Circus Upstart configuration"
     sudo('/usr/local/bin/circusd /etc/circus/circus.ini --daemon')
+    sudo('circusctl restart')
 
 
 def nginx_enable_site(nginx_config_file):
