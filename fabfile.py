@@ -161,7 +161,7 @@ def deploy(version):
 def config_app():
     with cd('growth-studio'):
         with prefix('source ' + virtual_env_path):
-            run('python manage.py collectstatic -l --noinput')
+            run('python manage.py collectstatic -v0 --noinput')
             run('python manage.py migrate')
 
 
