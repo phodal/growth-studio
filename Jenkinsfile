@@ -21,7 +21,8 @@ node {
   }
   
   stage ('Deploy') {
-    sh './ci/deploy.sh'
+    sh '. py35env/bin/activate'
+    sh "fab deploy:'1.${env.BUILD_NUMBER}'"
   }
 
   stage ('AC') {
