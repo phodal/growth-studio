@@ -21,7 +21,8 @@ node {
   }
 
   stage ('Release') {
-    sh './ci/tag.sh'
+    sh "git tag -a 'v1.${env.BUILD_NUMBER}' -m 'Auto Tag: 1.${env.BUILD_NUMBER}'"
+    sh "git push origin 'v1.${env.BUILD_NUMBER}'"
   }
   
   stage ('Deploy') {
