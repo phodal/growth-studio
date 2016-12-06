@@ -23,11 +23,10 @@ class IsAuthenticatedOrReadOnly(BasePermission):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email')
 
 
 class BlogSerializer(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
+    author = User
 
     class Meta:
         model = Blog
